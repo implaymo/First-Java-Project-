@@ -5,25 +5,27 @@ package playmo;
  */
 
  import java.util.Scanner;
-
-
+import org.apache.commons.text.WordUtils;
 
  public class Main {
  
-     public static void main(String[] args) {
+     /**
+     * @param args
+     */
+    public static void main(String[] args) {
          Book bookLibrary = new Book();
  
  
          Scanner scanner = new Scanner(System.in);
          System.out.print("What's your name? ");
          String name = scanner.nextLine();
-         String nameCapitalized = Capitalize.capitalizeFirstLetter(name);
+         String capName = WordUtils.capitalize(name);
  
          String user_answer;
          
          while (true){
  
-             System.out.print("Hello " + nameCapitalized +  " Would you like to get a random book, search or add a book to the library? Write 'random' or 'add''or 'search': ");
+             System.out.print("Hello " + capName +  " Would you like to get a random book, search or add a book to the library? Write 'random' or 'add''or 'search': ");
  
              user_answer = scanner.nextLine();
              
