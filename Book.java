@@ -36,6 +36,6 @@ public class Book {
 
     public void addNewBook(String newBook){
         bookTitles.add(newBook);
-        System.out.println("Added new book" + newBook);
+        System.out.println("Added new book \"" + newBook + "\"");
     }
 }
