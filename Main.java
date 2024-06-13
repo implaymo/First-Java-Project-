@@ -1,0 +1,52 @@
+package playmo;
+
+/**
+ * main
+ */
+
+ import java.util.Scanner;
+
+
+
+ public class Main {
+ 
+     public static void main(String[] args) {
+         Book bookLibrary = new Book();
+ 
+ 
+         Scanner scanner = new Scanner(System.in);
+         System.out.print("What's your name? ");
+         String name = scanner.nextLine();
+         String nameCapitalized = Capitalize.capitalizeFirstLetter(name);
+ 
+         String user_answer;
+         
+         while (true){
+ 
+             System.out.print("Hello " + nameCapitalized +  " Would you like to get a random book, search or add a book to the library? Write 'random' or 'add''or 'search': ");
+ 
+             user_answer = scanner.nextLine();
+             
+ 
+             if (!user_answer.equals("random") && !user_answer.equals("add")){
+                 System.out.println("You must choose random or add");
+ 
+             }
+     
+ 
+             if (user_answer.equals("random")) {
+                 String random_book = bookLibrary.getRandomBook();
+                 System.out.println("Here is your new bookLibrary: " + random_book);
+                 System.exit(0);
+             }
+             else if (user_answer.equals("add")) {
+                 System.out.println("Which bookLibrary do you want to add? ");
+                 String bookToAdd = scanner.nextLine();
+                 bookLibrary.addNewBook(bookToAdd);
+                 System.out.println(bookLibrary.bookTitles);
+                 break;
+             }
+             scanner.close();  
+             }
+     }
+ }
