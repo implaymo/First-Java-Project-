@@ -11,7 +11,6 @@ public class Api {
 
     public Api(){
         apiUrl = "https://openlibrary.org/people/mekBot/books/want-to-read.json";
-        apiRequest();
     }
 
     public void apiRequest(){

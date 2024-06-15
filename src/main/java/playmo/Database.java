@@ -1,12 +1,10 @@
 package playmo;
 
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,11 +17,14 @@ public class Database {
     String dbPass;
     String dbUrl;
     String sqlSelectAllBooks = "SELECT * FROM library.info";
+    Api api = new Api();
+
 
 
 
     public Database() {
         // Constructor to initialize all the variables of the class
+        api.apiRequest();
         getInfo();
     }
 
