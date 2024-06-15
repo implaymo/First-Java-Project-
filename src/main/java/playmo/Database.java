@@ -1,7 +1,10 @@
 package playmo;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.FileInputStream;
@@ -15,12 +18,17 @@ public class Database {
     String dbUser;
     String dbPass;
     String dbUrl;
+    String sqlSelectAllBooks = "SELECT * FROM library.info";
+
 
 
     public Database() {
+        // Constructor to initialize all the variables of the class
         getInfo();
     }
+
     public void getInfo(){
+        // Gets sensitive that from config.properties file
         try (InputStream input = new FileInputStream("config.properties")) {
             properties.load(input);
             dbUser = properties.getProperty("db.user");
@@ -31,15 +39,24 @@ public class Database {
         }
     
     }
-    
-    public void printUser(){
-        if (dbUser == null || dbPass == null){
-            System.out.println("CANT FIND USER");
-        }
-        else {
-            System.out.println(dbUser);
-            System.out.println(dbPass);
-        }
 
+    public void connectDb() {
+        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+             PreparedStatement ps = conn.prepareStatement(sqlSelectAllBooks);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                long id = rs.getLong("id");
+                String name = rs.getString("name");
+                String author = rs.getString("author");
+                
+                // Process the data (for now, we can just print it out)
+                System.out.println("ID: " + id + ", Name: " + name + ", Author: " + author);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-}
+
+}   

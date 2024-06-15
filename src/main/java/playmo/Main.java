@@ -12,18 +12,17 @@ import org.apache.commons.text.WordUtils;
      * @param args
      */
     public static void main(String[] args) {
+        Database db = new Database();
+        db.connectDb();
         Book bookLibrary = new Book();
         Scanner scanner = new Scanner(System.in);
+        
+        // Start of program 
         System.out.print("What's your name? ");
         String name = scanner.nextLine();
         String capName = WordUtils.capitalize(name);
+        String user_answer;  
         
-        String user_answer;
-        
-        Database db = new Database();
-
-        db.printUser();
-
         while (true){
 
         System.out.print("Hello " + capName +  " Would you like to get a random book, search or add a book to the library? Write 'random' or 'add''or 'search': ");
@@ -49,7 +48,7 @@ import org.apache.commons.text.WordUtils;
             System.out.println(bookLibrary.bookTitles);
             break;
         }
-        scanner.close();  
         }
+    scanner.close();     
     }
  }
