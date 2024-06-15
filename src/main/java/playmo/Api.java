@@ -4,6 +4,11 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONString;
+
 import java.io.IOException;
 
 public class Api {
@@ -20,7 +25,19 @@ public class Api {
         try {
             HttpResponse<String> response = httpclient.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("Response code: " + response.statusCode());
-            System.out.println("API response: " + response.body());
+            JSONObject jsonObject = new JSONObject(response.body());
+            JSONArray readingLogEntries = jsonObject.getJSONArray("reading_log_entries");
+            if (readingLogEntries.length() > 0){
+                for (int i = 0; i < readingLogEntries.length(); i++){
+                    JSONObject entry = readingLogEntries.getJSONObject(i);
+                    JSONObject work = entry.getJSONObject("work");
+                    String title = work.getString("title");
+                    System.out.println(title);
+                }   
+            } else {
+                System.out.println("Error: " + response.statusCode());
+            }            
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();;
         }

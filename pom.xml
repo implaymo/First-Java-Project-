@@ -42,7 +42,12 @@
         <artifactId>hibernate-core</artifactId>
         <version>5.4.10.Final</version>
       </dependency>
-
+      
+      <dependency>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+          <version>20210307</version>
+      </dependency>
   </dependencies>
 
   <build>
