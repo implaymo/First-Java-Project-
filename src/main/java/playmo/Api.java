@@ -32,7 +32,8 @@ public class Api {
                     JSONObject entry = readingLogEntries.getJSONObject(i);
                     JSONObject work = entry.getJSONObject("work");
                     String title = work.getString("title");
-                    System.out.println(title);
+                    JSONArray author = work.getJSONArray("author_names");
+                    System.out.println(author);
                 }   
             } else {
                 System.out.println("Error: " + response.statusCode());
