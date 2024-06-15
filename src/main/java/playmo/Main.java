@@ -16,6 +16,8 @@ import org.apache.commons.text.WordUtils;
         db.connectDb();
         Book bookLibrary = new Book();
         Scanner scanner = new Scanner(System.in);
+        Api api = new Api();
+        api.apiRequest();
         
         // Start of program 
         System.out.print("What's your name? ");
