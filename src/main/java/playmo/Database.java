@@ -16,7 +16,7 @@ public class Database {
     String dbUser;
     String dbPass;
     String dbUrl;
-    String sqlSelectAllBooks = "SELECT * FROM library.info";
+    String sqlSelectAllBooks = "SELECT * FROM book";
     Api api = new Api();
 
 

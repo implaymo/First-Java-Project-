@@ -9,10 +9,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONString;
 
+import com.mysql.cj.xdevapi.JsonArray;
+
 import java.io.IOException;
 
 public class Api {
     String apiUrl;
+    String title;
+    JsonArray author;
 
     public Api(){
         apiUrl = "https://openlibrary.org/people/mekBot/books/want-to-read.json";
@@ -31,9 +35,9 @@ public class Api {
                 for (int i = 0; i < readingLogEntries.length(); i++){
                     JSONObject entry = readingLogEntries.getJSONObject(i);
                     JSONObject work = entry.getJSONObject("work");
+                    Integer published_year = work.getInt("first_publish_year");
                     String title = work.getString("title");
                     JSONArray author = work.getJSONArray("author_names");
-                    System.out.println(author);
                 }   
             } else {
                 System.out.println("Error: " + response.statusCode());
@@ -42,7 +46,6 @@ public class Api {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();;
         }
-
     }   
 }
 
