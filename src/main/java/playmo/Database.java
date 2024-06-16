@@ -5,26 +5,28 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.beans.Statement;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.mysql.cj.jdbc.PreparedStatementWrapper;
+
 
 public class Database {
     Properties properties = new Properties();
+    Statement stmt = null;
     String dbUser;
     String dbPass;
     String dbUrl;
-    String sqlSelectAllBooks = "SELECT * FROM book";
-    Api api = new Api();
+    String bookTable = "SELECT * FROM book";
 
 
 
 
     public Database() {
         // Constructor to initialize all the variables of the class
-        api.apiRequest();
         getInfo();
     }
 
@@ -43,16 +45,16 @@ public class Database {
 
     public void connectDb() {
         try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
-             PreparedStatement ps = conn.prepareStatement(sqlSelectAllBooks);
-             ResultSet rs = ps.executeQuery()) {
+            PreparedStatement ps = conn.prepareStatement(bookTable);
+            ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 long id = rs.getLong("id");
                 String name = rs.getString("name");
-                String author = rs.getString("author");
+                Integer publish_year = rs.getInt("publish_year");
                 
                 // Process the data (for now, we can just print it out)
-                System.out.println("ID: " + id + ", Name: " + name + ", Author: " + author);
+                System.out.println("ID: " + id + ", Name: " + name + ", Publish year: " + publish_year);
             }
 
         } catch (SQLException e) {
@@ -60,4 +62,12 @@ public class Database {
         }
     }
 
-}   
+    public void addBookDb(Connection conn){
+        String insertBook = "INSERT INTO book (title, published_year) VALUES (?,?)";
+        }      
+
+    public void addAuthor(Connection conn){
+
+    }
+        
+}

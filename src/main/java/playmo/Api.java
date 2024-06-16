@@ -4,22 +4,20 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONString;
-
 import com.mysql.cj.xdevapi.JsonArray;
-
 import java.io.IOException;
 
 public class Api {
     String apiUrl;
     String title;
     JsonArray author;
+    Integer published_year;
 
     public Api(){
         apiUrl = "https://openlibrary.org/people/mekBot/books/want-to-read.json";
+        Database db = new Database();
     }
 
     public void apiRequest(){
@@ -38,6 +36,7 @@ public class Api {
                     Integer published_year = work.getInt("first_publish_year");
                     String title = work.getString("title");
                     JSONArray author = work.getJSONArray("author_names");
+                    // INSERT ALL THE DATA TO DATABASE BELOW // 
                 }   
             } else {
                 System.out.println("Error: " + response.statusCode());
