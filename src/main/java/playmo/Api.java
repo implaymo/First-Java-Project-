@@ -1,5 +1,10 @@
 package playmo;
 
+import java.sql.Array;
+import java.sql.Connection;
+
+import javax.xml.crypto.Data;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,10 +19,11 @@ public class Api {
     String title;
     JsonArray author;
     Integer published_year;
+    Database db;
 
     public Api(){
         apiUrl = "https://openlibrary.org/people/mekBot/books/want-to-read.json";
-        Database db = new Database();
+        db = new Database();
     }
 
     public void apiRequest(){
@@ -29,19 +35,26 @@ public class Api {
             System.out.println("Response code: " + response.statusCode());
             JSONObject jsonObject = new JSONObject(response.body());
             JSONArray readingLogEntries = jsonObject.getJSONArray("reading_log_entries");
+            
             if (readingLogEntries.length() > 0){
                 for (int i = 0; i < readingLogEntries.length(); i++){
                     JSONObject entry = readingLogEntries.getJSONObject(i);
                     JSONObject work = entry.getJSONObject("work");
-                    Integer published_year = work.getInt("first_publish_year");
+                    Integer publishedYear = work.getInt("first_publish_year");
                     String title = work.getString("title");
                     JSONArray author = work.getJSONArray("author_names");
-                    // INSERT ALL THE DATA TO DATABASE BELOW // 
-                }   
-            } else {
+                    for (Integer j = 0; j < author.length(); j++){
+                        String authorName = author.getString(j);
+                        db.addAuthor(db.conn, authorName);
+                        System.out.println("Author added");
+                    }                    
+                    db.addBook(db.conn, title, publishedYear);
+                    System.out.println("Book added");
+                }
+            }
+            else {
                 System.out.println("Error: " + response.statusCode());
-            }            
-
+            } 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();;
         }

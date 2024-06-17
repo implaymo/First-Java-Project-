@@ -14,6 +14,10 @@ import org.apache.commons.text.WordUtils;
     public static void main(String[] args) {
         Database db = new Database();
         db.connectDb();
+
+        Api api = new Api();
+        api.apiRequest();
+        
         Book bookLibrary = new Book();
         Scanner scanner = new Scanner(System.in);
         

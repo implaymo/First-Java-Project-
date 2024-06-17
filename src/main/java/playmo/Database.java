@@ -1,5 +1,6 @@
 package playmo;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,7 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.mysql.cj.jdbc.PreparedStatementWrapper;
+import org.json.JSONArray;
+
 
 
 public class Database {
@@ -21,6 +23,7 @@ public class Database {
     String dbPass;
     String dbUrl;
     String bookTable = "SELECT * FROM book";
+    Connection conn;
 
 
 
@@ -43,31 +46,59 @@ public class Database {
     
     }
 
-    public void connectDb() {
-        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
-            PreparedStatement ps = conn.prepareStatement(bookTable);
-            ResultSet rs = ps.executeQuery()) {
+    public Connection connectDb() {
+        try{
+             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+             System.out.println("Connection established successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return conn;
+    }
+
+    public void queryBookTable(Connection conn){
+        // Query data from book table to check if values are on it
+        try (PreparedStatement pstmt = conn.prepareStatement(bookTable);
+            ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 long id = rs.getLong("id");
                 String name = rs.getString("name");
-                Integer publish_year = rs.getInt("publish_year");
-                
+                Integer publishYear = rs.getInt("publish_year");
+    
                 // Process the data (for now, we can just print it out)
-                System.out.println("ID: " + id + ", Name: " + name + ", Publish year: " + publish_year);
+                System.out.println("ID: " + id + ", Name: " + name + ", Publish year: " + publishYear);
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void addBookDb(Connection conn){
-        String insertBook = "INSERT INTO book (title, published_year) VALUES (?,?)";
+    public void addBook(Connection conn, String title, Integer publishedYear){
+        // adds a book to the database
+        String insertBook = "INSERT INTO book (title, published_year) VALUES (?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(insertBook)) {
+            pstmt.setString(1, title);
+            pstmt.setInt(2, publishedYear);
+            pstmt.executeQuery();
+            System.out.println("Book added: " + title + " (" + publishedYear + ")");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         }      
 
-    public void addAuthor(Connection conn){
-
+    public void addAuthor(Connection conn, String author){
+        // adds an author to the database
+        String insertAuthor = "INSERT INTO author(name) VALUES (?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(insertAuthor)) {
+            pstmt.setString(1, author);
+            pstmt.executeQuery();
+            System.out.println("Author added: " + author);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
         
 }
