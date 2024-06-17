@@ -23,7 +23,9 @@ public class Database {
     String dbPass;
     String dbUrl;
     String bookTable = "SELECT * FROM book";
+    String checkBook = "SELECT COUNT(*) FROM book WHERE name = ?";
     Connection conn;
+    boolean exists = false;
 
 
 
@@ -98,6 +100,22 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean checkBookDb(String bookName) {
+        try (PreparedStatement psmt = conn.prepareStatement(checkBook)) {
+            psmt.setString(1, bookName);
+            try (ResultSet rs = psmt.executeQuery()){
+                if (rs.next()) {
+                    exists = rs.getInt(1) > 0;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exists;
     }
         
 }

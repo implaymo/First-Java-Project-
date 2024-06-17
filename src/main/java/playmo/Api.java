@@ -43,14 +43,16 @@ public class Api {
                     Integer publicationDate = work.getInt("first_publish_year");
                     String title = work.getString("title");
                     JSONArray author = work.getJSONArray("author_names");
-                    db.addBook(db.conn, title, publicationDate);
-                    for (Integer j = 0; j < author.length(); j++){
-                        String authorName = author.getString(j);
-                        db.addAuthor(db.conn, authorName);
-                    }                    
-                    
+                    if (db.checkBookDb(title)) {
+                        continue;
+                    } else {
+                        db.addBook(db.conn, title, publicationDate);
+                        for (Integer j = 0; j < author.length(); j++){
+                            String authorName = author.getString(j);
+                            db.addAuthor(db.conn, authorName);
+                        }     
+                    }                                   
                 }
-            db.queryBookTable(db.conn);
             }
             else {
                 System.out.println("Error: " + response.statusCode());
