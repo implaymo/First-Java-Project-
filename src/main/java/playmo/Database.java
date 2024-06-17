@@ -31,6 +31,7 @@ public class Database {
     public Database() {
         // Constructor to initialize all the variables of the class
         getInfo();
+        conn = connectDb();
     }
 
     public void getInfo(){
@@ -81,7 +82,7 @@ public class Database {
         try (PreparedStatement pstmt = conn.prepareStatement(insertBook)) {
             pstmt.setString(1, title);
             pstmt.setInt(2, publishedYear);
-            pstmt.executeQuery();
+            pstmt.executeUpdate();
             System.out.println("Book added: " + title + " (" + publishedYear + ")");
 
         } catch (Exception e) {
@@ -94,7 +95,7 @@ public class Database {
         String insertAuthor = "INSERT INTO author(name) VALUES (?)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertAuthor)) {
             pstmt.setString(1, author);
-            pstmt.executeQuery();
+            pstmt.executeUpdate();
             System.out.println("Author added: " + author);
         } catch (Exception e) {
             e.printStackTrace();
