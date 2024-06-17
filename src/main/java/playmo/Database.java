@@ -32,7 +32,6 @@ public class Database {
         // Constructor to initialize all the variables of the class
         getInfo();
         conn = connectDb();
-        queryBookTable(conn);
     }
 
     public void getInfo(){
@@ -66,10 +65,10 @@ public class Database {
             while (rs.next()) {
                 long id = rs.getLong("bookid");
                 String name = rs.getString("name");
-                Integer publicationYear = rs.getInt("publication_year");
+                Integer publicationDate = rs.getInt("publication_date");
     
                 // Process the data (for now, we can just print it out)
-                System.out.println("ID: " + id + ", Name: " + name + ", Publish year: " + publicationYear);
+                System.out.println("ID: " + id + ", Name: " + name + ", Publish year: " + publicationDate);
             }
 
         } catch (Exception e) {
@@ -77,12 +76,12 @@ public class Database {
         }
     }
 
-    public void addBook(Connection conn, String title, Integer publicationYear){
+    public void addBook(Connection conn, String title, Integer publicationDate){
         // adds a book to the database
         String insertBook = "INSERT INTO book(name, publication_date) VALUES (?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertBook)) {
             pstmt.setString(1, title);
-            pstmt.setInt(2, publicationYear);
+            pstmt.setInt(2, publicationDate);
             pstmt.executeUpdate();
 
         } catch (Exception e) {
