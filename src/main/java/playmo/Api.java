@@ -40,10 +40,10 @@ public class Api {
                 for (int i = 0; i < readingLogEntries.length(); i++){
                     JSONObject entry = readingLogEntries.getJSONObject(i);
                     JSONObject work = entry.getJSONObject("work");
-                    Integer publishedYear = work.getInt("first_publish_year");
+                    Integer publicationYear = work.getInt("first_publish_year");
                     String title = work.getString("title");
                     JSONArray author = work.getJSONArray("author_names");
-                    db.addBook(db.conn, title, publishedYear);
+                    db.addBook(db.conn, title, publicationYear);
                     for (Integer j = 0; j < author.length(); j++){
                         String authorName = author.getString(j);
                         db.addAuthor(db.conn, authorName);

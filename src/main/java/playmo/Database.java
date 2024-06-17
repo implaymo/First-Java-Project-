@@ -32,6 +32,7 @@ public class Database {
         // Constructor to initialize all the variables of the class
         getInfo();
         conn = connectDb();
+        queryBookTable(conn);
     }
 
     public void getInfo(){
@@ -63,12 +64,12 @@ public class Database {
             ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                long id = rs.getLong("id");
+                long id = rs.getLong("bookid");
                 String name = rs.getString("name");
-                Integer publishYear = rs.getInt("publish_year");
+                Integer publicationYear = rs.getInt("publication_year");
     
                 // Process the data (for now, we can just print it out)
-                System.out.println("ID: " + id + ", Name: " + name + ", Publish year: " + publishYear);
+                System.out.println("ID: " + id + ", Name: " + name + ", Publish year: " + publicationYear);
             }
 
         } catch (Exception e) {
@@ -76,14 +77,13 @@ public class Database {
         }
     }
 
-    public void addBook(Connection conn, String title, Integer publishedYear){
+    public void addBook(Connection conn, String title, Integer publicationYear){
         // adds a book to the database
         String insertBook = "INSERT INTO book(name, publication_date) VALUES (?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertBook)) {
             pstmt.setString(1, title);
-            pstmt.setInt(2, publishedYear);
+            pstmt.setInt(2, publicationYear);
             pstmt.executeUpdate();
-            System.out.println("Book added: " + title + " (" + publishedYear + ")");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,7 +96,6 @@ public class Database {
         try (PreparedStatement pstmt = conn.prepareStatement(insertAuthor)) {
             pstmt.setString(1, author);
             pstmt.executeUpdate();
-            System.out.println("Author added: " + author);
         } catch (Exception e) {
             e.printStackTrace();
         }
