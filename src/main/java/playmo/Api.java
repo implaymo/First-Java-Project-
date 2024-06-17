@@ -43,13 +43,12 @@ public class Api {
                     Integer publishedYear = work.getInt("first_publish_year");
                     String title = work.getString("title");
                     JSONArray author = work.getJSONArray("author_names");
+                    db.addBook(db.conn, title, publishedYear);
                     for (Integer j = 0; j < author.length(); j++){
                         String authorName = author.getString(j);
                         db.addAuthor(db.conn, authorName);
-                        System.out.println("Author added");
                     }                    
-                    db.addBook(db.conn, title, publishedYear);
-                    System.out.println("Book added");
+                    
                 }
             }
             else {

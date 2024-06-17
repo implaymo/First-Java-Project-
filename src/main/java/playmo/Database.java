@@ -78,7 +78,7 @@ public class Database {
 
     public void addBook(Connection conn, String title, Integer publishedYear){
         // adds a book to the database
-        String insertBook = "INSERT INTO book (title, published_year) VALUES (?, ?)";
+        String insertBook = "INSERT INTO book(name, publication_date) VALUES (?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertBook)) {
             pstmt.setString(1, title);
             pstmt.setInt(2, publishedYear);
