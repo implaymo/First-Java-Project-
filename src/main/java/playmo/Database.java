@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.persistence.metamodel.StaticMetamodel;
-
 
 public class Database {
     Properties properties = new Properties();
@@ -71,7 +69,6 @@ public class Database {
                 // Process the data (for now, we can just print it out)
                 System.out.println("ID: " + id + ", Name: " + name + ", Publish year: " + publicationDate);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,8 +84,8 @@ public class Database {
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 bookId = rs.getInt(1);
+                System.out.println("BOOK ID " + bookId);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,6 +100,7 @@ public class Database {
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 authorId = rs.getInt(1);
+                System.out.println("AUTHOR ID " + authorId);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,10 +108,11 @@ public class Database {
     }
 
     public void addJuncTable(Connection conn, Integer bookId, Integer authorId) {
-        String insertJuncTable = "INSERT INTO book_author(BookId, AuthorId) VALUES(?,?)";
+        String insertJuncTable = "INSERT INTO book_authors(BookId, AuthorId) VALUES(?,?)";
         try (PreparedStatement ps = conn.prepareStatement(insertJuncTable)) {
             ps.setInt(1, bookId);
             ps.setInt(2, authorId);
+            ps.executeUpdate();
         } catch (SQLException e ){
             e.printStackTrace();
         }
@@ -133,6 +132,5 @@ public class Database {
             e.printStackTrace();
         }
         return exists;
-    }
-        
+    }       
 }
