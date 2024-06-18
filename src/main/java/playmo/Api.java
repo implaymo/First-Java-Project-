@@ -50,6 +50,7 @@ public class Api {
                         for (Integer j = 0; j < author.length(); j++){
                             String authorName = author.getString(j);
                             db.addAuthor(db.conn, authorName);
+                            db.addJuncTable(db.conn,  db.bookId, db.authorId);
                         }     
                     }                                   
                 }

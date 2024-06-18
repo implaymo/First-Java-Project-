@@ -1,19 +1,17 @@
 package playmo;
 
-import java.sql.Array;
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.beans.Statement;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.json.JSONArray;
-
+import javax.persistence.metamodel.StaticMetamodel;
 
 
 public class Database {
@@ -26,7 +24,8 @@ public class Database {
     String checkBook = "SELECT COUNT(*) FROM book WHERE name = ?";
     Connection conn;
     boolean exists = false;
-
+    int authorId;
+    int bookId;
 
 
 
@@ -61,8 +60,8 @@ public class Database {
 
     public void queryBookTable(Connection conn){
         // Query data from book table to check if values are on it
-        try (PreparedStatement pstmt = conn.prepareStatement(bookTable);
-            ResultSet rs = pstmt.executeQuery()) {
+        try (PreparedStatement ps = conn.prepareStatement(bookTable);
+            ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 long id = rs.getLong("bookid");
@@ -81,10 +80,14 @@ public class Database {
     public void addBook(Connection conn, String title, Integer publicationDate){
         // adds a book to the database
         String insertBook = "INSERT INTO book(name, publication_date) VALUES (?, ?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(insertBook)) {
-            pstmt.setString(1, title);
-            pstmt.setInt(2, publicationDate);
-            pstmt.executeUpdate();
+        try (PreparedStatement ps = conn.prepareStatement(insertBook, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, title);
+            ps.setInt(2, publicationDate);
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                bookId = rs.getInt(1);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,10 +97,24 @@ public class Database {
     public void addAuthor(Connection conn, String author){
         // adds an author to the database
         String insertAuthor = "INSERT INTO author(name) VALUES (?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(insertAuthor)) {
-            pstmt.setString(1, author);
-            pstmt.executeUpdate();
+        try (PreparedStatement ps = conn.prepareStatement(insertAuthor, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, author);
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                authorId = rs.getInt(1);
+            }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addJuncTable(Connection conn, Integer bookId, Integer authorId) {
+        String insertJuncTable = "INSERT INTO book_author(BookId, AuthorId) VALUES(?,?)";
+        try (PreparedStatement ps = conn.prepareStatement(insertJuncTable)) {
+            ps.setInt(1, bookId);
+            ps.setInt(2, authorId);
+        } catch (SQLException e ){
             e.printStackTrace();
         }
     }
