@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Random;
 
 
 public class Database {
@@ -56,7 +57,7 @@ public class Database {
         return conn;
     }
 
-    public void queryBookTable(Connection conn){
+    public void queryBookTable(){
         // Query data from book table to check if values are on it
         try (PreparedStatement ps = conn.prepareStatement(bookTable);
             ResultSet rs = ps.executeQuery()) {
@@ -74,7 +75,7 @@ public class Database {
         }
     }
 
-    public void addBook(Connection conn, String title, Integer publicationDate){
+    public void addBook(String title, Integer publicationDate){
         // adds a book to the database
         String insertBook = "INSERT INTO book(name, publication_date) VALUES (?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(insertBook, Statement.RETURN_GENERATED_KEYS)) {
@@ -91,7 +92,7 @@ public class Database {
         }
         }      
 
-    public void addAuthor(Connection conn, String author){
+    public void addAuthor(String author){
         // adds an author to the database
         String insertAuthor = "INSERT INTO author(name) VALUES (?)";
         try (PreparedStatement ps = conn.prepareStatement(insertAuthor, Statement.RETURN_GENERATED_KEYS)) {
@@ -107,7 +108,7 @@ public class Database {
         }
     }
 
-    public void addJuncTable(Connection conn, Integer bookId, Integer authorId) {
+    public void addJuncTable(Integer bookId, Integer authorId) {
         String insertJuncTable = "INSERT INTO book_authors(BookId, AuthorId) VALUES(?,?)";
         try (PreparedStatement ps = conn.prepareStatement(insertJuncTable)) {
             ps.setInt(1, bookId);
@@ -132,5 +133,23 @@ public class Database {
             e.printStackTrace();
         }
         return exists;
-    }       
+    }     
+    
+    public void getRandomBook() {
+        String allBooks = "SELECT name FROM book ORDER BY RAND() LIMIT 1;";
+        try (PreparedStatement psmt = conn.prepareStatement(allBooks)) {
+            try (ResultSet rs = psmt.executeQuery()) {
+                while (rs.next()) {
+                    String bookName = rs.getString("name");
+
+                    System.out.println("The book you got is: " + bookName);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
