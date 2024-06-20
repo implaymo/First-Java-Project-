@@ -159,10 +159,20 @@ public class Database {
         try (PreparedStatement psmt = conn.prepareStatement(getAuthors)) {
             psmt.setInt(1, bookId);  // Set the bookId parameter
             try (ResultSet rs = psmt.executeQuery()) {
+
+                StringBuilder authorSb = new StringBuilder(); 
                 while (rs.next()) {
                     String author = rs.getString("name");
-                    System.out.println("AUTHOR OF THE BOOK: " + author);
+                    authorSb.append(author).append(", ");
                 }
+                if (authorSb.length() > 0) {
+                    authorSb.setLength(authorSb.length() - 2);
+                    System.out.println("Authors of the book: " + authorSb.toString());
+                }
+                else {
+                    System.out.println("Authors of the book: " + authorSb.toString());
+                }
+
             } 
         } catch (SQLException e) {
             e.printStackTrace();
