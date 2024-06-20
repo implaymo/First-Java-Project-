@@ -18,7 +18,6 @@ import org.apache.commons.text.WordUtils;
         Api api = new Api();
         api.apiRequest();
         
-        Book bookLibrary = new Book();
         Scanner scanner = new Scanner(System.in);
         
         // Start of program 
@@ -41,15 +40,12 @@ import org.apache.commons.text.WordUtils;
 
 
         if (user_answer.equals("random")) {
-            String random_book = bookLibrary.getRandomBook();
-            System.out.println("Here is your new bookLibrary: " + random_book);
+            db.getRandomBook();
             System.exit(0);
         }
         else if (user_answer.equals("add")) {
             System.out.println("Which book do you want to add to Library? ");
             String bookToAdd = scanner.nextLine();
-            bookLibrary.addNewBook(bookToAdd);
-            System.out.println(bookLibrary.bookTitles);
             break;
         }
         }
