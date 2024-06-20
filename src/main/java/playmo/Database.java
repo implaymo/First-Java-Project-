@@ -136,18 +136,35 @@ public class Database {
     }     
     
     public void getRandomBook() {
-        String allBooks = "SELECT name FROM book ORDER BY RAND() LIMIT 1;";
-        try (PreparedStatement psmt = conn.prepareStatement(allBooks)) {
+        String randomBook = "SELECT bookid, name FROM book ORDER BY RAND() LIMIT 1;";
+        try (PreparedStatement psmt = conn.prepareStatement(randomBook)) {
             try (ResultSet rs = psmt.executeQuery()) {
                 while (rs.next()) {
                     String bookName = rs.getString("name");
-
+                    Integer bookId = rs.getInt("bookid");
                     System.out.println("The book you got is: " + bookName);
+                    getAuthors(bookId);
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAuthors(Integer bookId) {
+        String getAuthors = "SELECT author.name FROM author JOIN book_authors ON author.authorId = book_authors.authorId WHERE book_authors.BookId = ?";
+        try (PreparedStatement psmt = conn.prepareStatement(getAuthors)) {
+            psmt.setInt(1, bookId);  // Set the bookId parameter
+            try (ResultSet rs = psmt.executeQuery()) {
+                while (rs.next()) {
+                    String author = rs.getString("name");
+                    System.out.println("AUTHOR OF THE BOOK: " + author);
+                }
+            } 
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
