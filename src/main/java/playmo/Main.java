@@ -51,10 +51,18 @@ import org.apache.commons.text.WordUtils;
             String publicationDate = scanner.nextLine();
             Integer pubDate = Integer.parseInt(publicationDate);
             db.addBook(nameBook, pubDate);
-            System.out.println("Who are the authors? ");
+            System.out.println("Who are the authors? If the authors are more than 1, right and after each author. ");
             String authorToAdd = scanner.nextLine();
-            db.addAuthor(authorToAdd);
-            db.addJuncTable(db.bookId, db.authorId);
+            String[] words = authorToAdd.split("\\s+");
+            for (String word: words){
+                if (word.equals("and")){
+                    continue;
+                }
+                else {
+                    db.addAuthor(word);
+                    db.addJuncTable(db.bookId, db.authorId);       
+                }
+            }
             break;
         }
         }
