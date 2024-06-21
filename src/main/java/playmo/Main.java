@@ -33,8 +33,8 @@ import org.apache.commons.text.WordUtils;
         user_answer = scanner.nextLine();
         
 
-        if (!user_answer.equals("random") && !user_answer.equals("add")){
-            System.out.println("You must choose random or add");
+        if (!user_answer.equals("random") && !user_answer.equals("add") && !user_answer.equals("search")){
+            System.out.println("You must choose random, add or search");
 
         }
 
@@ -45,7 +45,16 @@ import org.apache.commons.text.WordUtils;
         }
         else if (user_answer.equals("add")) {
             System.out.println("Which book do you want to add to Library? ");
-            String bookToAdd = scanner.nextLine();
+            String nameBook = scanner.nextLine();
+
+            System.out.println("Which year was it published? ");
+            String publicationDate = scanner.nextLine();
+            Integer pubDate = Integer.parseInt(publicationDate);
+            db.addBook(nameBook, pubDate);
+            System.out.println("What are the authors? ");
+            String authorToAdd = scanner.nextLine();
+            db.addAuthor(authorToAdd);
+            db.addJuncTable(db.bookId, db.authorId);
             break;
         }
         }

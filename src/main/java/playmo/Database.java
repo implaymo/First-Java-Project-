@@ -90,7 +90,8 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        }      
+        } 
+        
 
     public void addAuthor(String author){
         // adds an author to the database
