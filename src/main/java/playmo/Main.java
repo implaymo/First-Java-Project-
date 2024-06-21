@@ -51,7 +51,7 @@ import org.apache.commons.text.WordUtils;
             String publicationDate = scanner.nextLine();
             Integer pubDate = Integer.parseInt(publicationDate);
             db.addBook(nameBook, pubDate);
-            System.out.println("What are the authors? ");
+            System.out.println("Who are the authors? ");
             String authorToAdd = scanner.nextLine();
             db.addAuthor(authorToAdd);
             db.addJuncTable(db.bookId, db.authorId);
