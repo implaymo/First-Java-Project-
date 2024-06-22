@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.Random;
 
+import org.jboss.jandex.Result;
+
 
 public class Database {
     Properties properties = new Properties();
@@ -55,28 +57,62 @@ public class Database {
         return conn;
     }
 
-    public void queryBookTable(String bookName){
-        // Query data from book table to check if values are on it
+    public Integer queryBookTable(String bookName){
+        // Query data from book table
         String bookTable = "SELECT * FROM book WHERE name LIKE ?";
         try (PreparedStatement ps = conn.prepareStatement(bookTable)) {
             ps.setString(1, bookName);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    bookId = rs.getInt("bookid");
                     String name = rs.getString("name");
                     Integer publicationDate = rs.getInt("publication_date");
-        
-                    // Process the data (for now, we can just print it out)
                     System.out.println("Name: " + name + ", Publish year: " + publicationDate);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bookId;
+    }
 
+    public Integer queryJuncTable(Integer bookId) {
+        // Query data from author table
+        String sqlJunc = "SELECT * from book_authors WHERE BookId LIKE ?";
+        try (PreparedStatement ps = conn.prepareStatement(sqlJunc)) {
+            ps.setInt(1, bookId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    authorId = rs.getInt("AuthorId");
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return authorId;
+    }
+
+    public void queryAuthorTable(Integer authorId) {
+        String sqlAuthor = "SELECT * from author WHERE authorid LIKE ?";
+        try (PreparedStatement ps = conn.prepareStatement(sqlAuthor)) {
+            ps.setInt(1, authorId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String authorName = rs.getString("name");
+                    System.out.println("Authors: " + authorName);
+                }
+            }  catch (Exception e) {
+                e.printStackTrace();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
     public void addBook(String title, Integer publicationDate){
         // adds a book to the database
         String insertBook = "INSERT INTO book(name, publication_date) VALUES (?, ?)";

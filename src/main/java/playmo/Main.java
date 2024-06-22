@@ -68,6 +68,8 @@ import org.apache.commons.text.WordUtils;
             System.out.println("Which book or author are you trying to find? ");
             String itemSearch = scanner.nextLine();
             db.queryBookTable(itemSearch);
+            db.queryJuncTable(db.bookId);
+            db.queryAuthorTable(db.authorId);
         }
         }
     scanner.close();     
