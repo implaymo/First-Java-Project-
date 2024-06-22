@@ -24,10 +24,10 @@ import org.apache.commons.text.WordUtils;
         String name = scanner.nextLine();
         String capName = WordUtils.capitalize(name);
         String user_answer;  
-        
-        while (true){
+        System.out.println("Hello " + capName);
 
-        System.out.print("Hello " + capName +  " Would you like to get a random book, search or add a book to the library? Write 'random' or 'add''or 'search': ");
+        while (true){ 
+        System.out.println("Would you like to get a random book, search or add a book to the library? Write 'random' or 'add''or 'search': ");
 
         user_answer = scanner.nextLine();
         
@@ -50,7 +50,7 @@ import org.apache.commons.text.WordUtils;
             String publicationDate = scanner.nextLine();
             Integer pubDate = Integer.parseInt(publicationDate);
             db.addBook(nameBook, pubDate);
-            System.out.println("Who are the authors? If the authors are more than 1, right and after each author. ");
+            System.out.println("Who are the authors? If the authors are more than 1, right 'and' after each author. ");
             String authorToAdd = scanner.nextLine();
             String[] words = authorToAdd.split("\\s+");
             for (String word: words){
@@ -67,9 +67,13 @@ import org.apache.commons.text.WordUtils;
         else if (user_answer.equals("search")) {
             System.out.println("Which book or author are you trying to find? ");
             String itemSearch = scanner.nextLine();
-            db.queryBookTable(itemSearch);
-            db.queryJuncTable(db.bookId);
-            db.queryAuthorTable(db.authorId);
+            try {
+                db.queryBookTable(itemSearch);
+                db.queryJuncTable(db.bookId);
+                db.queryAuthorTable();
+            } catch (Exception e) {
+                System.out.println("Book name wrong or book not in library. Try again.");
+            }
         }
         }
     scanner.close();     

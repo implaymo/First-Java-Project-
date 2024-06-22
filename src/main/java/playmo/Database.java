@@ -10,9 +10,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.Random;
+import java.util.ArrayList;
 
-import org.jboss.jandex.Result;
 
 
 public class Database {
@@ -25,11 +24,13 @@ public class Database {
     boolean exists = false;
     int authorId;
     int bookId;
+    ArrayList<Integer> allAuthors;
 
 
 
     public Database() {
         // Constructor to initialize all the variables of the class
+        this.allAuthors = new ArrayList<>();
         getInfo();
         conn = connectDb();
     }
@@ -78,14 +79,15 @@ public class Database {
         return bookId;
     }
 
-    public Integer queryJuncTable(Integer bookId) {
+    public ArrayList<Integer> queryJuncTable(Integer bookId) {
         // Query data from author table
         String sqlJunc = "SELECT * from book_authors WHERE BookId LIKE ?";
         try (PreparedStatement ps = conn.prepareStatement(sqlJunc)) {
             ps.setInt(1, bookId);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+                while (rs.next()) {
                     authorId = rs.getInt("AuthorId");
+                    allAuthors.add(authorId);
                 }
             } catch (Exception e){
                 e.printStackTrace();
@@ -93,25 +95,28 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return authorId;
+        return allAuthors;
     }
 
-    public void queryAuthorTable(Integer authorId) {
+    public void queryAuthorTable() {
         String sqlAuthor = "SELECT * from author WHERE authorid LIKE ?";
-        try (PreparedStatement ps = conn.prepareStatement(sqlAuthor)) {
-            ps.setInt(1, authorId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    String authorName = rs.getString("name");
-                    System.out.println("Authors: " + authorName);
+            try (PreparedStatement ps = conn.prepareStatement(sqlAuthor)) {
+                for (int author: allAuthors){
+                    ps.setInt(1, author);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                                String authorName = rs.getString("name");
+                                System.out.println("Authors: " + authorName);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();            
+                        }
+                    } 
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            }  catch (Exception e) {
-                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
     
     public void addBook(String title, Integer publicationDate){
         // adds a book to the database
