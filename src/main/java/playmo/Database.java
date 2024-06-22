@@ -24,13 +24,15 @@ public class Database {
     boolean exists = false;
     int authorId;
     int bookId;
-    ArrayList<Integer> allAuthors;
+    ArrayList<Integer> allAuthorsId;
+    ArrayList<String> allAuthorsName;
 
 
 
     public Database() {
         // Constructor to initialize all the variables of the class
-        this.allAuthors = new ArrayList<>();
+        this.allAuthorsId = new ArrayList<>();
+        this.allAuthorsName = new ArrayList<>();
         getInfo();
         conn = connectDb();
     }
@@ -87,7 +89,7 @@ public class Database {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     authorId = rs.getInt("AuthorId");
-                    allAuthors.add(authorId);
+                    allAuthorsId.add(authorId);
                 }
             } catch (Exception e){
                 e.printStackTrace();
@@ -95,18 +97,18 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return allAuthors;
+        return allAuthorsId;
     }
 
     public void queryAuthorTable() {
         String sqlAuthor = "SELECT * from author WHERE authorid LIKE ?";
             try (PreparedStatement ps = conn.prepareStatement(sqlAuthor)) {
-                for (int author: allAuthors){
+                for (int author: allAuthorsId){
                     ps.setInt(1, author);
                     try (ResultSet rs = ps.executeQuery()) {
                         if (rs.next()) {
                                 String authorName = rs.getString("name");
-                                System.out.println("Authors: " + authorName);
+                                allAuthorsName.add(authorName);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();            
@@ -115,6 +117,7 @@ public class Database {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            System.out.println("Authors: " + String.join(", ", allAuthorsName));
             }
 
     
