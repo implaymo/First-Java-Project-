@@ -19,8 +19,6 @@ public class Database {
     String dbUser;
     String dbPass;
     String dbUrl;
-    String bookTable = "SELECT * FROM book";
-    String checkBook = "SELECT COUNT(*) FROM book WHERE name = ?";
     Connection conn;
     boolean exists = false;
     int authorId;
@@ -57,19 +55,23 @@ public class Database {
         return conn;
     }
 
-    public void queryBookTable(){
+    public void queryBookTable(String bookName){
         // Query data from book table to check if values are on it
-        try (PreparedStatement ps = conn.prepareStatement(bookTable);
-            ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                long id = rs.getLong("bookid");
-                String name = rs.getString("name");
-                Integer publicationDate = rs.getInt("publication_date");
-    
-                // Process the data (for now, we can just print it out)
-                System.out.println("ID: " + id + ", Name: " + name + ", Publish year: " + publicationDate);
+        String bookTable = "SELECT * FROM book WHERE name LIKE ?";
+        try (PreparedStatement ps = conn.prepareStatement(bookTable)) {
+            ps.setString(1, bookName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String name = rs.getString("name");
+                    Integer publicationDate = rs.getInt("publication_date");
+        
+                    // Process the data (for now, we can just print it out)
+                    System.out.println("Name: " + name + ", Publish year: " + publicationDate);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,7 +122,9 @@ public class Database {
         }
     }
 
-    public boolean checkBookDb(String bookName) {
+    public boolean checkBook(String bookName) {
+        // Checks if book exists in database
+        String checkBook = "SELECT COUNT(*) FROM book WHERE name = ?";
         try (PreparedStatement psmt = conn.prepareStatement(checkBook)) {
             psmt.setString(1, bookName);
             try (ResultSet rs = psmt.executeQuery()){

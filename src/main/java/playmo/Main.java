@@ -14,7 +14,6 @@ import org.apache.commons.text.WordUtils;
     public static void main(String[] args) {
         Database db = new Database();
         db.connectDb();
-
         Api api = new Api();
         api.apiRequest();
         
@@ -64,6 +63,11 @@ import org.apache.commons.text.WordUtils;
                 }
             }
             break;
+        }
+        else if (user_answer.equals("search")) {
+            System.out.println("Which book or author are you trying to find? ");
+            String itemSearch = scanner.nextLine();
+            db.queryBookTable(itemSearch);
         }
         }
     scanner.close();     

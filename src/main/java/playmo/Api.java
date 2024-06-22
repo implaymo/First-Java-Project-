@@ -38,7 +38,7 @@ public class Api {
                     Integer publicationDate = work.getInt("first_publish_year");
                     String title = work.getString("title");
                     JSONArray author = work.getJSONArray("author_names");
-                    if (db.checkBookDb(title)) {
+                    if (db.checkBook(title)) {
                         continue;
                     } else {
                         db.addBook(title, publicationDate);
