@@ -10,9 +10,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
-import javax.swing.text.html.HTMLDocument.HTMLReader.PreAction;
-
 import java.util.ArrayList;
 import org.apache.commons.text.WordUtils;
 
@@ -69,7 +66,6 @@ public class Database {
     }
 
     public Integer getBookId(String bookName){
-        Integer bookId = null;
         String bookTable = "SELECT * FROM book WHERE name LIKE ?";
         try (PreparedStatement ps = conn.prepareStatement(bookTable)) {
             ps.setString(1, bookName);
@@ -78,7 +74,7 @@ public class Database {
                     bookId = rs.getInt("bookid");
                     String name = rs.getString("name");
                     Integer publicationDate = rs.getInt("publication_date");
-                    System.out.println("Title: " + name + " Publish year: " + publicationDate);
+                    System.out.println("Title: " + name + " / " +" Publish year: " + publicationDate);
                 } else {
                     System.out.println("Book not found.");
                 }
@@ -95,11 +91,10 @@ public class Database {
         String sqlBookId = "SELECT * FROM book WHERE bookid = ?";
         try (PreparedStatement ps = conn.prepareStatement(sqlBookId)) {
             if (allBooksId.isEmpty()){
-                System.out.println("Author not found");
+                System.out.println("Author not found1");
             } 
             else {
                     for (Integer book: allBooksId){
-                        System.out.println("BOOK ID: " + book);
                         ps.setInt(1, book);
                         try (ResultSet rs = ps.executeQuery()) {
                             if (rs.next()){
@@ -111,6 +106,7 @@ public class Database {
                         }  
                     }
                     System.out.println("Books written: " + String.join(", ", allBookName));
+                    allBookName = new ArrayList<>();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,10 +114,11 @@ public class Database {
 
     }
 
-    public ArrayList<Integer> queryJuncBookId(Integer bookId) {
+    public ArrayList<Integer> queryJuncBookId(Integer idBook) {
+        allAuthorsId = new ArrayList<>();
         String sqlJunc = "SELECT * from book_authors WHERE BookId LIKE ?";
         try (PreparedStatement ps = conn.prepareStatement(sqlJunc)) {
-            ps.setInt(1, bookId);
+            ps.setInt(1, idBook);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     authorId = rs.getInt("AuthorId");
@@ -136,10 +133,11 @@ public class Database {
         return allAuthorsId;
     }
 
-    public ArrayList<Integer> queryJuncAuthorId(Integer authorId) {
+    public ArrayList<Integer> queryJuncAuthorId(Integer idAuthor) {
+        allBooksId = new ArrayList<>();
         String sqlJuncAuthor = "SELECT * from book_authors WHERE AuthorId LIKE ?";
         try (PreparedStatement ps = conn.prepareStatement(sqlJuncAuthor)) {
-            ps.setInt(1, authorId); 
+            ps.setInt(1, idAuthor); 
             try (ResultSet rs = ps.executeQuery()){
                 while (rs.next()) {
                     bookId = rs.getInt("BookId");
@@ -158,7 +156,7 @@ public class Database {
         String sqlAuthorId = "SELECT * from author WHERE authorid LIKE ?";
             try (PreparedStatement ps = conn.prepareStatement(sqlAuthorId)) {
                     if (allAuthorsId.isEmpty()){
-                        System.out.println("Authors not found.");
+                        System.out.println("Authors not found2.");
                     }
                     else {
                         for (int author: allAuthorsId){ {
@@ -173,7 +171,8 @@ public class Database {
                                 } 
                             } 
                         }
-                        System.out.println("Authors: " + String.join(", ", allAuthorsName));                        
+                        System.out.println("Authors: " + String.join(", ", allAuthorsName));  
+                        allAuthorsName = new ArrayList<>();                      
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -181,17 +180,15 @@ public class Database {
         }
 
     public Integer getAuthorId(String name){
-        Integer authorId = null;
         String sqlAuthorName = "SELECT * from author WHERE name LIKE ?";
         try (PreparedStatement ps = conn.prepareStatement(sqlAuthorName)){
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     authorId = rs.getInt("authorid");
-                    System.out.println("AUTHOR ID: " + authorId);
                 }
                 else {
-                    System.out.println("Author not found");
+                    System.out.println("Author not found3");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -214,7 +211,6 @@ public class Database {
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 bookId = rs.getInt(1);
-                System.out.println("BOOK ID " + bookId);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -232,7 +228,6 @@ public class Database {
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 authorId = rs.getInt(1);
-                System.out.println("AUTHOR ID " + authorId);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -290,7 +285,7 @@ public class Database {
     public void getAuthors(Integer bookId) {
         String getAuthors = "SELECT author.name FROM author JOIN book_authors ON author.authorId = book_authors.authorId WHERE book_authors.BookId = ?";
         try (PreparedStatement psmt = conn.prepareStatement(getAuthors)) {
-            psmt.setInt(1, bookId);  // Set the bookId parameter
+            psmt.setInt(1, bookId);  
             try (ResultSet rs = psmt.executeQuery()) {
 
                 StringBuilder totalAuthors = new StringBuilder(); 

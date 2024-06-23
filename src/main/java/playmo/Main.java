@@ -52,19 +52,19 @@ import org.apache.commons.text.WordUtils;
             db.addBook(nameBook, pubDate);
             System.out.println("Who are the authors? If the authors are more than 1, right 'and' after each author. ");
             String authorToAdd = scanner.nextLine();
-            String[] words = authorToAdd.split("\\s+");
-            for (String word: words){
-                if (word.equals("and")){
+            String[] totalAuthors = authorToAdd.split("\\s+");
+            for (String author: totalAuthors){
+                if (author.equals("and")){
                     continue;
                 }
                 else {
-                    Integer authorId = db.getAuthorId(word);
+                    Integer authorId = db.getAuthorId(author);
                     if (authorId != null){
                         db.addJuncTable(db.bookId, db.authorId);   
                         System.out.println("IF STATMENT WORKED"); 
                     }    
                     else {
-                        db.addAuthor(word);
+                        db.addAuthor(author);
                         db.addJuncTable(db.bookId, db.authorId); 
                         System.out.println("ELSE STATMENT WORKED");
                     }
@@ -84,15 +84,19 @@ import org.apache.commons.text.WordUtils;
                     db.queryJuncBookId(db.bookId);
                     db.queryAuthorId();
                 } catch (Exception e) {
-                    System.out.println("Wrong or book not in library. Try again.");
+                    e.printStackTrace();
                 }
             } else if (typeSearch.equals("author")) {
+                try { 
                 System.out.println("What author you want to search? ");
                 String authorSearch = scanner.nextLine();
                 authorSearch = WordUtils.capitalize(authorSearch);
                 db.getAuthorId(authorSearch);
                 db.queryJuncAuthorId(db.authorId);
-                db.queryBookId();
+                db.queryBookId();  
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         }
