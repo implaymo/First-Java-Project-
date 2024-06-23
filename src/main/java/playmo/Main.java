@@ -27,7 +27,7 @@ import org.apache.commons.text.WordUtils;
         System.out.println("Hello " + capName);
 
         while (true){ 
-        System.out.println("Would you like to get a random book, search or add a book to the library? Write 'random' or 'add''or 'search': ");
+        System.out.println("Would you like to get a random book, search or add a book to the library? Write 'random' or 'add' or 'search': ");
 
         user_answer = scanner.nextLine();
         
@@ -69,17 +69,22 @@ import org.apache.commons.text.WordUtils;
             String typeSearch = scanner.nextLine();
             if (typeSearch.equals("book")) {
                 try {
-                    System.out.println("What book do you want to find? ");
-                    String itemSearch = scanner.nextLine();
-                    itemSearch = WordUtils.capitalize(itemSearch);
-                    db.queryBookTable(itemSearch);
-                    db.queryJuncTable(db.bookId);
-                    db.queryAuthorTable();
+                    System.out.println("What book you want to search? ");
+                    String bookSearch = scanner.nextLine();
+                    bookSearch = WordUtils.capitalize(bookSearch);
+                    db.queryBookName(bookSearch);
+                    db.queryJuncBookId(db.bookId);
+                    db.queryAuthorId();
                 } catch (Exception e) {
                     System.out.println("Wrong or book not in library. Try again.");
                 }
             } else if (typeSearch.equals("author")) {
-                System.out.println("HE WANTS AN AUTHOR");
+                System.out.println("What author you want to search? ");
+                String authorSearch = scanner.nextLine();
+                authorSearch = WordUtils.capitalize(authorSearch);
+                db.queryAuthorName(authorSearch);
+                db.queryJuncAuthorId(db.authorId);
+                db.queryBookId();
             }
         }
         }
