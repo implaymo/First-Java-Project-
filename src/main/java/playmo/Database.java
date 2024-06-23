@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.ArrayList;
+import org.apache.commons.text.WordUtils;
 
 
 
@@ -125,6 +126,7 @@ public class Database {
         // adds a book to the database
         String insertBook = "INSERT INTO book(name, publication_date) VALUES (?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(insertBook, Statement.RETURN_GENERATED_KEYS)) {
+            title = WordUtils.capitalize(title);
             ps.setString(1, title);
             ps.setInt(2, publicationDate);
             ps.executeUpdate();
@@ -143,6 +145,7 @@ public class Database {
         // adds an author to the database
         String insertAuthor = "INSERT INTO author(name) VALUES (?)";
         try (PreparedStatement ps = conn.prepareStatement(insertAuthor, Statement.RETURN_GENERATED_KEYS)) {
+            author = WordUtils.capitalize(author);
             ps.setString(1, author);
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();

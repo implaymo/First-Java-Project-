@@ -67,6 +67,7 @@ import org.apache.commons.text.WordUtils;
         else if (user_answer.equals("search")) {
             System.out.println("Which book or author are you trying to find? ");
             String itemSearch = scanner.nextLine();
+            itemSearch = WordUtils.capitalize(itemSearch);
             try {
                 db.queryBookTable(itemSearch);
                 db.queryJuncTable(db.bookId);
