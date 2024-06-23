@@ -72,6 +72,8 @@ public class Database {
                     String name = rs.getString("name");
                     Integer publicationDate = rs.getInt("publication_date");
                     System.out.println("Name: " + name + ", Publish year: " + publicationDate);
+                } else {
+                    System.out.println("Book not found.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -104,22 +106,28 @@ public class Database {
     public void queryAuthorTable() {
         String sqlAuthor = "SELECT * from author WHERE authorid LIKE ?";
             try (PreparedStatement ps = conn.prepareStatement(sqlAuthor)) {
-                for (int author: allAuthorsId){
-                    ps.setInt(1, author);
-                    try (ResultSet rs = ps.executeQuery()) {
-                        if (rs.next()) {
-                                String authorName = rs.getString("name");
-                                allAuthorsName.add(authorName);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();            
+                    if (allAuthorsId.isEmpty()){
+                        System.out.println("Authors not found.");
+                    }
+                    else {
+                        for (int author: allAuthorsId){ {
+                            ps.setInt(1, author);
+                            try (ResultSet rs = ps.executeQuery()) {
+                                if (rs.next()) {
+                                        String authorName = rs.getString("name");
+                                        allAuthorsName.add(authorName);
+                                }
+                                } catch (Exception e) {
+                                    e.printStackTrace();            
+                                } 
+                            } 
                         }
-                    } 
+                        System.out.println("Authors: " + String.join(", ", allAuthorsName));                        
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            System.out.println("Authors: " + String.join(", ", allAuthorsName));
-            }
+        }
 
     
     public void addBook(String title, Integer publicationDate){

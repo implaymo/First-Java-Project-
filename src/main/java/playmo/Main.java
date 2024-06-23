@@ -73,7 +73,7 @@ import org.apache.commons.text.WordUtils;
                 db.queryJuncTable(db.bookId);
                 db.queryAuthorTable();
             } catch (Exception e) {
-                System.out.println("Book name wrong or book not in library. Try again.");
+                System.out.println("Wrong or book not in library. Try again.");
             }
         }
         }
