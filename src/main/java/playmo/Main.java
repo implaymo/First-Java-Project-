@@ -65,15 +65,21 @@ import org.apache.commons.text.WordUtils;
             break;
         }
         else if (user_answer.equals("search")) {
-            System.out.println("Which book or author are you trying to find? ");
-            String itemSearch = scanner.nextLine();
-            itemSearch = WordUtils.capitalize(itemSearch);
-            try {
-                db.queryBookTable(itemSearch);
-                db.queryJuncTable(db.bookId);
-                db.queryAuthorTable();
-            } catch (Exception e) {
-                System.out.println("Wrong or book not in library. Try again.");
+            System.out.println("What do you want to search? Type 'book' or 'author': ");
+            String typeSearch = scanner.nextLine();
+            if (typeSearch.equals("book")) {
+                try {
+                    System.out.println("What book do you want to find? ");
+                    String itemSearch = scanner.nextLine();
+                    itemSearch = WordUtils.capitalize(itemSearch);
+                    db.queryBookTable(itemSearch);
+                    db.queryJuncTable(db.bookId);
+                    db.queryAuthorTable();
+                } catch (Exception e) {
+                    System.out.println("Wrong or book not in library. Try again.");
+                }
+            } else if (typeSearch.equals("author")) {
+                System.out.println("HE WANTS AN AUTHOR");
             }
         }
         }
