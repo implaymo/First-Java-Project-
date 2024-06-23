@@ -68,7 +68,8 @@ public class Database {
         return conn;
     }
 
-    public Integer queryBookName(String bookName){
+    public Integer getBookId(String bookName){
+        Integer bookId = null;
         String bookTable = "SELECT * FROM book WHERE name LIKE ?";
         try (PreparedStatement ps = conn.prepareStatement(bookTable)) {
             ps.setString(1, bookName);
@@ -77,7 +78,7 @@ public class Database {
                     bookId = rs.getInt("bookid");
                     String name = rs.getString("name");
                     Integer publicationDate = rs.getInt("publication_date");
-                    System.out.println("Name: " + name + ", Publish year: " + publicationDate);
+                    System.out.println("Title: " + name + " Publish year: " + publicationDate);
                 } else {
                     System.out.println("Book not found.");
                 }
@@ -94,15 +95,15 @@ public class Database {
         String sqlBookId = "SELECT * FROM book WHERE bookid = ?";
         try (PreparedStatement ps = conn.prepareStatement(sqlBookId)) {
             if (allBooksId.isEmpty()){
-                System.out.println("Book not found");
+                System.out.println("Author not found");
             } 
             else {
                     for (Integer book: allBooksId){
+                        System.out.println("BOOK ID: " + book);
                         ps.setInt(1, book);
                         try (ResultSet rs = ps.executeQuery()) {
                             if (rs.next()){
                                 String bookName = rs.getString("name");
-                                System.out.println(bookName);
                                 allBookName.add(bookName);
                             }
                         } catch (Exception e) {
@@ -179,7 +180,8 @@ public class Database {
                 }
         }
 
-    public Integer queryAuthorName(String name){
+    public Integer getAuthorId(String name){
+        Integer authorId = null;
         String sqlAuthorName = "SELECT * from author WHERE name LIKE ?";
         try (PreparedStatement ps = conn.prepareStatement(sqlAuthorName)){
             ps.setString(1, name);
@@ -187,6 +189,9 @@ public class Database {
                 if (rs.next()) {
                     authorId = rs.getInt("authorid");
                     System.out.println("AUTHOR ID: " + authorId);
+                }
+                else {
+                    System.out.println("Author not found");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -288,17 +293,17 @@ public class Database {
             psmt.setInt(1, bookId);  // Set the bookId parameter
             try (ResultSet rs = psmt.executeQuery()) {
 
-                StringBuilder authorSb = new StringBuilder(); 
+                StringBuilder totalAuthors = new StringBuilder(); 
                 while (rs.next()) {
                     String author = rs.getString("name");
-                    authorSb.append(author).append(", ");
+                    totalAuthors.append(author).append(", ");
                 }
-                if (authorSb.length() > 0) {
-                    authorSb.setLength(authorSb.length() - 2);
-                    System.out.println("Authors of the book: " + authorSb.toString());
+                if (totalAuthors.length() > 0) {
+                    totalAuthors.setLength(totalAuthors.length() - 2);
+                    System.out.println("Authors of the book: " + totalAuthors.toString());
                 }
                 else {
-                    System.out.println("Authors of the book: " + authorSb.toString());
+                    System.out.println("Authors of the book: " + totalAuthors.toString());
                 }
 
             } 

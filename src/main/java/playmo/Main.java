@@ -58,8 +58,16 @@ import org.apache.commons.text.WordUtils;
                     continue;
                 }
                 else {
-                    db.addAuthor(word);
-                    db.addJuncTable(db.bookId, db.authorId);       
+                    Integer authorId = db.getAuthorId(word);
+                    if (authorId != null){
+                        db.addJuncTable(db.bookId, db.authorId);   
+                        System.out.println("IF STATMENT WORKED"); 
+                    }    
+                    else {
+                        db.addAuthor(word);
+                        db.addJuncTable(db.bookId, db.authorId); 
+                        System.out.println("ELSE STATMENT WORKED");
+                    }
                 }
             }
             break;
@@ -72,7 +80,7 @@ import org.apache.commons.text.WordUtils;
                     System.out.println("What book you want to search? ");
                     String bookSearch = scanner.nextLine();
                     bookSearch = WordUtils.capitalize(bookSearch);
-                    db.queryBookName(bookSearch);
+                    db.getBookId(bookSearch);
                     db.queryJuncBookId(db.bookId);
                     db.queryAuthorId();
                 } catch (Exception e) {
@@ -82,7 +90,7 @@ import org.apache.commons.text.WordUtils;
                 System.out.println("What author you want to search? ");
                 String authorSearch = scanner.nextLine();
                 authorSearch = WordUtils.capitalize(authorSearch);
-                db.queryAuthorName(authorSearch);
+                db.getAuthorId(authorSearch);
                 db.queryJuncAuthorId(db.authorId);
                 db.queryBookId();
             }
