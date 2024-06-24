@@ -71,10 +71,13 @@ import org.apache.commons.text.WordUtils;
             break;
         }
         else if (user_answer.equals("search")) {
+            boolean searchAnswer = false;
+            while (searchAnswer == false) {
             System.out.println("What do you want to search? Type 'book' or 'author': ");
             String typeSearch = scanner.nextLine();
             if (typeSearch.equals("book")) {
                 try {
+                    searchAnswer = true;
                     System.out.println("What book you want to search? ");
                     String bookSearch = scanner.nextLine();
                     bookSearch = WordUtils.capitalize(bookSearch);
@@ -87,6 +90,7 @@ import org.apache.commons.text.WordUtils;
                 }
             } else if (typeSearch.equals("author")) {
                 try { 
+                    searchAnswer = true;
                 System.out.println("What author you want to search? ");
                 String authorSearch = scanner.nextLine();
                 authorSearch = WordUtils.capitalize(authorSearch);
@@ -97,11 +101,14 @@ import org.apache.commons.text.WordUtils;
                     e.printStackTrace();
                 }
                 restartGame(scanner);
+            } else {
+                System.out.println("You must choose 'book' or 'author'.");
             }
         }
         }
+    }   
     scanner.close();     
-    }
+}
 
     public static boolean restartGame(Scanner scanner) {
         boolean answer = false;
