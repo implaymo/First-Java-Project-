@@ -57,7 +57,8 @@ import org.apache.commons.text.WordUtils;
                 }
                 else {
                     Integer authorId = db.getAuthorId(author);
-                    if (authorId != null){
+                    System.out.println("AUTHOR ID TO ADD TO DATABASE: " + authorId);
+                    if (authorId != 0){
                         db.addJuncTable(db.bookId, db.authorId);   
                     }    
                     else {
