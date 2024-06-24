@@ -13,6 +13,8 @@ import java.util.Properties;
 import java.util.ArrayList;
 import org.apache.commons.text.WordUtils;
 
+import net.bytebuddy.implementation.bind.annotation.AllArguments.Assignment;
+
 
 
 public class Database {
@@ -38,6 +40,8 @@ public class Database {
         this.allAuthorsName = new ArrayList<>();
         this.allBooksId = new ArrayList<>();
         this.allBookName = new ArrayList<>();
+        this.authorId = 0;
+        this.bookId = 0; 
         getInfo();
         conn = connectDb();
     }
@@ -90,23 +94,19 @@ public class Database {
     public void queryBookId() {
         String sqlBookId = "SELECT * FROM book WHERE bookid = ?";
         try (PreparedStatement ps = conn.prepareStatement(sqlBookId)) {
-            if (allBooksId.isEmpty()){
-                System.out.println("Author not found1");
-            } 
-            else {
-                    for (Integer book: allBooksId){
-                        ps.setInt(1, book);
-                        try (ResultSet rs = ps.executeQuery()) {
-                            if (rs.next()){
-                                String bookName = rs.getString("name");
-                                allBookName.add(bookName);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }  
-                    }
-                    System.out.println("Books written: " + String.join(", ", allBookName));
-                    allBookName = new ArrayList<>();
+            if (!allBooksId.isEmpty()){
+                for (Integer book: allBooksId){
+                    ps.setInt(1, book);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()){
+                            String bookName = rs.getString("name");
+                            allBookName.add(bookName);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }  
+                }
+                System.out.println("Books written: " + String.join(", ", allBookName));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,7 +114,6 @@ public class Database {
     }
 
     public ArrayList<Integer> queryJuncBookId(Integer idBook) {
-        allAuthorsId = new ArrayList<>();
         String sqlJunc = "SELECT * from book_authors WHERE BookId LIKE ?";
         try (PreparedStatement ps = conn.prepareStatement(sqlJunc)) {
             ps.setInt(1, idBook);
@@ -133,20 +132,21 @@ public class Database {
     }
 
     public ArrayList<Integer> queryJuncAuthorId(Integer idAuthor) {
-        allBooksId = new ArrayList<>();
         String sqlJuncAuthor = "SELECT * from book_authors WHERE AuthorId LIKE ?";
-        try (PreparedStatement ps = conn.prepareStatement(sqlJuncAuthor)) {
-            ps.setInt(1, idAuthor); 
-            try (ResultSet rs = ps.executeQuery()){
-                while (rs.next()) {
-                    bookId = rs.getInt("BookId");
-                    allBooksId.add(bookId);
-                }
+        if (idAuthor != 0){
+            try (PreparedStatement ps = conn.prepareStatement(sqlJuncAuthor)) {
+                ps.setInt(1, idAuthor); 
+                try (ResultSet rs = ps.executeQuery()){
+                    while (rs.next()) {
+                        bookId = rs.getInt("BookId");
+                        allBooksId.add(bookId);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }           
             } catch (Exception e) {
                 e.printStackTrace();
-            }           
-        } catch (Exception e) {
-            e.printStackTrace();
+            }
         }
         return allBooksId;
     }
@@ -154,11 +154,8 @@ public class Database {
     public void queryAuthorId() {
         String sqlAuthorId = "SELECT * from author WHERE authorid LIKE ?";
             try (PreparedStatement ps = conn.prepareStatement(sqlAuthorId)) {
-                    if (allAuthorsId.isEmpty()){
-                        System.out.println("Authors not found2.");
-                    }
-                    else {
-                        for (int author: allAuthorsId){ {
+                    if (!allAuthorsId.isEmpty()){
+                        for (int author: allAuthorsId){ 
                             ps.setInt(1, author);
                             try (ResultSet rs = ps.executeQuery()) {
                                 if (rs.next()) {
@@ -168,10 +165,8 @@ public class Database {
                                 } catch (Exception e) {
                                     e.printStackTrace();            
                                 } 
-                            } 
                         }
-                        System.out.println("Authors: " + String.join(", ", allAuthorsName));  
-                        allAuthorsName = new ArrayList<>();                      
+                        System.out.println("Authors: " + String.join(", ", allAuthorsName)); 
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -187,7 +182,7 @@ public class Database {
                     authorId = rs.getInt("authorid");
                 }
                 else {
-                    System.out.println("Author not found3");
+                    System.out.println("Author not found.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();

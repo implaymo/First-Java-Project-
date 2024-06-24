@@ -1,5 +1,6 @@
 package playmo;
 
+import java.util.ArrayList;
 /**
  * main
  */
@@ -39,7 +40,7 @@ import org.apache.commons.text.WordUtils;
 
         if (user_answer.equals("random")) {
             db.getRandomBook();
-            restartGame(scanner);
+            restartGame(scanner, db);
         }
         else if (user_answer.equals("add")) {
             System.out.println("Which book do you want to add to Library? ");
@@ -66,7 +67,7 @@ import org.apache.commons.text.WordUtils;
                         db.addJuncTable(db.bookId, db.authorId); 
                     }
                 }
-                restartGame(scanner);
+                restartGame(scanner, db);
                 
             }
             break;
@@ -85,7 +86,7 @@ import org.apache.commons.text.WordUtils;
                     db.getBookId(bookSearch);
                     db.queryJuncBookId(db.bookId);
                     db.queryAuthorId();
-                    restartGame(scanner);
+                    restartGame(scanner, db);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -97,11 +98,11 @@ import org.apache.commons.text.WordUtils;
                 authorSearch = WordUtils.capitalize(authorSearch);
                 db.getAuthorId(authorSearch);
                 db.queryJuncAuthorId(db.authorId);
-                db.queryBookId();  
+                db.queryBookId(); 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                restartGame(scanner);
+                restartGame(scanner, db);
             } else {
                 System.out.println("You must choose 'book' or 'author'.");
             }
@@ -111,7 +112,7 @@ import org.apache.commons.text.WordUtils;
     scanner.close();     
 }
 
-    public static boolean restartGame(Scanner scanner) {
+    public static boolean restartGame(Scanner scanner, Database db) {
         boolean answer = false;
         while (answer == false) {
             String question = "Would you like to stay in the library? Press 'y' to stay or press 'n' to leave. ";
@@ -121,6 +122,12 @@ import org.apache.commons.text.WordUtils;
                 System.out.println("You must choose 'y' or 'n'.");
             }
             if (decision.equals("y")) {
+                db.authorId = 0;
+                db.bookId = 0;
+                db.allAuthorsId = new ArrayList<>();   
+                db.allAuthorsName = new ArrayList<>(); 
+                db.allBooksId = new ArrayList<>();
+                db.allBookName = new ArrayList<>();
                 answer = true;
             }
             else if (decision.equals("n")){
