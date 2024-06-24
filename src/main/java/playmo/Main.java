@@ -24,7 +24,7 @@ import org.apache.commons.text.WordUtils;
         String name = scanner.nextLine();
         String capName = WordUtils.capitalize(name);
         String user_answer;  
-        System.out.println("Hello " + capName);
+        System.out.println("Welcome to our Library " + capName + "!");
 
         while (true){ 
         System.out.println("Would you like to get a random book, search or add a book to the library? Write 'random' or 'add' or 'search': ");
@@ -34,18 +34,16 @@ import org.apache.commons.text.WordUtils;
 
         if (!user_answer.equals("random") && !user_answer.equals("add") && !user_answer.equals("search")){
             System.out.println("You must choose random, add or search");
-
         }
 
 
         if (user_answer.equals("random")) {
             db.getRandomBook();
-            System.exit(0);
+            restartGame(scanner);
         }
         else if (user_answer.equals("add")) {
             System.out.println("Which book do you want to add to Library? ");
             String nameBook = scanner.nextLine();
-
             System.out.println("Which year was it published? ");
             String publicationDate = scanner.nextLine();
             Integer pubDate = Integer.parseInt(publicationDate);
@@ -61,14 +59,14 @@ import org.apache.commons.text.WordUtils;
                     Integer authorId = db.getAuthorId(author);
                     if (authorId != null){
                         db.addJuncTable(db.bookId, db.authorId);   
-                        System.out.println("IF STATMENT WORKED"); 
                     }    
                     else {
                         db.addAuthor(author);
                         db.addJuncTable(db.bookId, db.authorId); 
-                        System.out.println("ELSE STATMENT WORKED");
                     }
                 }
+                restartGame(scanner);
+                
             }
             break;
         }
@@ -83,6 +81,7 @@ import org.apache.commons.text.WordUtils;
                     db.getBookId(bookSearch);
                     db.queryJuncBookId(db.bookId);
                     db.queryAuthorId();
+                    restartGame(scanner);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -97,9 +96,31 @@ import org.apache.commons.text.WordUtils;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                restartGame(scanner);
             }
         }
         }
     scanner.close();     
+    }
+
+    public static boolean restartGame(Scanner scanner) {
+        boolean answer = false;
+        while (answer == false) {
+            String question = "Would you like to stay in the library? Press 'y' to stay or press 'n' to leave. ";
+            System.out.println(question);
+            String decision = scanner.nextLine();
+            if (!decision.equals("y") && !decision.equals("n")){
+                System.out.println("You must choose 'y' or 'n'.");
+            }
+            if (decision.equals("y")) {
+                answer = true;
+            }
+            else if (decision.equals("n")){
+                answer = true;
+                System.out.println("Thank you for joining us today. See you soon!");
+                System.exit(0);
+            }
+        }
+        return answer;
     }
  }

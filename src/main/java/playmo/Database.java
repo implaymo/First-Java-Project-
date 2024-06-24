@@ -111,7 +111,6 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public ArrayList<Integer> queryJuncBookId(Integer idBook) {
