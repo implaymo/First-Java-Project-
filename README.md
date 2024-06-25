@@ -85,7 +85,8 @@ This project is a terminal-based library system that interacts with an external 
 #    - Create a new MySQL database.
 #    - Create the tables using the following SQL commands:
 
-#    ```sql
+#    ```
+# MySQL
 CREATE TABLE book (
     bookid INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -110,7 +111,8 @@ CREATE TABLE book_authors (
     - In the root directory of the project, create a file named `config.properties`.
     - Add the following properties to the file and update the values with your database credentials and URL:
 
-#    ```properties
+#    ```
+# properties
 db.user=yourDatabaseUsername
 db.pass=yourDatabasePassword
 db.url=jdbc:mysql://yourDatabaseUrl:3306/yourDatabaseName
