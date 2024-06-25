@@ -66,10 +66,10 @@ CREATE TABLE book_authors (
     - In the root directory of the project, create a file named `config.properties`.
     - Add the following properties to the file and update the values with your database credentials and URL:
 
-# properties
- -**db.user=yourDatabaseUsername**
- -**db.pass=yourDatabasePassword**
- -**db.url=jdbc:mysql://yourDatabaseUrl:3306/yourDatabaseName**
+## Properties
+ -db.user=yourDatabaseUsername
+ -db.pass=yourDatabasePassword
+ -db.url=jdbc:mysql://yourDatabaseUrl:3306/yourDatabaseName
 
 # 4. **Configure the application:**
 
