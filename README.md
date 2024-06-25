@@ -37,10 +37,10 @@ This project is a terminal-based library system that interacts with an external 
    git clone <repository-url>
    cd <repository-directory>
 
-# 2. **Set up the MySQL database:**
+## 2. **Set up the MySQL database:**
 
-#    - Create a new MySQL database.
-#    - Create the tables using the following SQL commands:
+###    - Create a new MySQL database.
+###    - Create the tables using the following SQL commands:
 
 ## SQL
 CREATE TABLE book (
