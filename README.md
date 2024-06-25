@@ -37,56 +37,13 @@ This project is a terminal-based library system that interacts with an external 
    git clone <repository-url>
    cd <repository-directory>
 
-
-Sure, let's update the README.md file to include instructions for creating the config.properties file.
-
-markdown
-Copy code
-# Terminal Library
-
-This project is a terminal-based library system that interacts with an external API to fetch book data and store it in a MySQL database. The database is designed to handle books and authors, including the relationships between them, allowing for books with multiple authors.
-
-## Features
-
-- Fetches books from an external API and stores them in a MySQL database.
-- Database schema includes three tables: `book`, `author`, and a junction table `book_authors` for many-to-many relationships between books and authors.
-- Users can search for books or authors, add new books and authors to the database, and get a random book with its author(s).
-
-## Tech Used
-
-- **Java**: For the application logic.
-- **MySQL**: For data storage.
-- **API Requests**: To fetch book data.
-
-## Database Schema
-
-1. **book**
-   - `bookid` (Primary Key)
-   - `name`
-   - `publication_date`
-
-2. **author**
-   - `authorid` (Primary Key)
-   - `name`
-
-3. **book_authors**
-   - `bookid` (Foreign Key referencing book.bookid)
-   - `authorid` (Foreign Key referencing author.authorid)
-
-## Setup
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone <repository-url>
-   cd <repository-directory>
 # 2. **Set up the MySQL database:**
 
 #    - Create a new MySQL database.
 #    - Create the tables using the following SQL commands:
 
 #    ```
-# MySQL
+## SQL
 CREATE TABLE book (
     bookid INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
