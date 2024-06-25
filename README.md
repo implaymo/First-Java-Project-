@@ -86,23 +86,23 @@ This project is a terminal-based library system that interacts with an external 
 #    - Create the tables using the following SQL commands:
 
 #    ```sql
-CREATE TABLE book (
-    bookid INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    publication_date INT
-);
+# CREATE TABLE book (
+#    bookid INT AUTO_INCREMENT PRIMARY KEY,
+#    name VARCHAR(255) NOT NULL,
+#    publication_date INT
+# );
 
-CREATE TABLE author (
-    authorid INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
+# CREATE TABLE author (
+#    authorid INT AUTO_INCREMENT PRIMARY KEY,
+#    name VARCHAR(255) NOT NULL
+# );
 
-CREATE TABLE book_authors (
-    bookid INT,
-    authorid INT,
-    FOREIGN KEY (bookid) REFERENCES book(bookid),
-    FOREIGN KEY (authorid) REFERENCES author(authorid)
-);
+# CREATE TABLE book_authors (
+#    bookid INT,
+#    authorid INT,
+#    FOREIGN KEY (bookid) REFERENCES book(bookid),
+#    FOREIGN KEY (authorid) REFERENCES author(authorid)
+# );
 #    ```
 
 # 3. **Create the `config.properties` file:**
@@ -111,9 +111,9 @@ CREATE TABLE book_authors (
 #    - Add the following properties to the file and update the values with your database credentials and URL:
 
 #    ```properties
-db.user=yourDatabaseUsername
-db.pass=yourDatabasePassword
-db.url=jdbc:mysql://yourDatabaseUrl:3306/yourDatabaseName
+# db.user=yourDatabaseUsername
+# db.pass=yourDatabasePassword
+# db.url=jdbc:mysql://yourDatabaseUrl:3306/yourDatabaseName
 #    ```
 
 # 4. **Configure the application:**
